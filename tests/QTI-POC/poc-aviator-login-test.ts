@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 test('test', async ({ page }) => {
   // UAT environment login url from .env
