@@ -5,18 +5,18 @@ import path from 'path';
 //dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 test('Aviator - Single Driver / Single Vehicle', async ({ page }) => {
+  
   // UAT environment login url from .env
-
   // await page.goto(process.env.LOGIN_URL);
   await page.goto('https://uat.agent-quotes.goosehead.com/');
   await page.getByLabel('Username').click();
-  // UAT environment username from .env
 
+  // UAT environment username from .env
   // await page.goto(process.env.USERNAME);
   await page.getByLabel('Username').fill('automation.testing@goosehead.com.uat');
   await page.getByLabel('Password').click();
-  // UAT environment password from .env
 
+  // UAT environment password from .env
   // await page.goto(process.env.PASSWORD);
   await page.getByLabel('Password').fill('GHnov2022$');
   await page.getByRole('button', { name: 'Log In to Sandbox' }).click();
@@ -35,8 +35,8 @@ test('Aviator - Single Driver / Single Vehicle', async ({ page }) => {
     await addressField.clear();
     await addressField.fill('8607 Concerto Cir');
 
+    // Storing first option from dynamic list (address search in this case)
     const listItem = await page.locator('ul > li:first-child');
-    // Stores first option from dynamic list (address search in this case)
 
     // Setting variables for loop to fix typeahead options
     let listItemFound = false;
@@ -57,17 +57,18 @@ test('Aviator - Single Driver / Single Vehicle', async ({ page }) => {
       addressRetries++;
     }
 
-    await listItem.click();
     // Selects the address from the dropdown
+    await listItem.click();
 
-    await page.selectOption('#leadSource', { index: 2 });
     // Uses the id of the field to then select the option in the dropdown based on the index
+    await page.selectOption('#leadSource', { index: 2 });
 
     await page.getByRole('button', { name: 'Let’s Do This' }).click();
     // Note: You specifically need to use the ’ character to make this button work */
 
+    // Note: Including to allow the page to load between SF login and the following page
     await page.waitForNavigation({ timeout: 5000 });
-    // Note: Included to allow the page to load between SF login and the following page
+
     addressPagePassed = await page.isVisible("text='Only Quote Auto'")
 
     // If it's not found, wait for a bit and then retry
@@ -100,8 +101,8 @@ test('Aviator - Single Driver / Single Vehicle', async ({ page }) => {
   await page.getByPlaceholder('(555) 123-4567').type('55555555555');
   // Added an extra digit as one would be lost in the execution
   
+  // TO DO: Needs to be randomized for Root
   await page.getByPlaceholder('username@email.com').type('test@test.com');
-  // Needs to be randomized for Root
 
   await page.getByRole('button', { name: 'Continue' }).click();
 
@@ -141,7 +142,7 @@ test('Aviator - Single Driver / Single Vehicle', async ({ page }) => {
   // Storing the delete vehicle button in a variable to loop through and delete any defaults
   const deleteVehicleButton = page.getByRole('button', { name: 'delete vehicle' });
 
-// Looping and deleting all extra vehicles
+  // Looping and deleting all extra vehicles
   while ( await deleteVehicleButton.isVisible()) {
     await deleteVehicleButton.click();
   }
