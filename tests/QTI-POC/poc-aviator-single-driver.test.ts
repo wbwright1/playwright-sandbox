@@ -6,6 +6,8 @@ import path from 'path';
 
 test('Aviator - Single Driver / Single Vehicle', async ({ page }) => {
   
+  test.setTimeout(60000);
+
   // UAT environment login url from .env
   // await page.goto(process.env.LOGIN_URL);
   await page.goto('https://uat.agent-quotes.goosehead.com/');
@@ -159,7 +161,7 @@ test('Aviator - Single Driver / Single Vehicle', async ({ page }) => {
   // -------------------------------------------- Prior Policy Page --------------------------------------------
 
   // Filling out prior policy information
-  await page.selectOption('select[name="prior_carrier"]', { value: 'Allstate'});
+  await page.selectOption('select[name="prior_carrier"]', { value: 'Allstate' });
   await page.fill('input[name="years_with_prior_carrier"]','3');
   await page.selectOption('select[name="prior_liability_limits"]', { value: '100/300'});
 

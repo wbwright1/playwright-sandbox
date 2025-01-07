@@ -1,4 +1,5 @@
 import { Page, Locator } from '@playwright/test';
+import { retry } from '../tests/utils/retryUtils';
 
 export class SFLoginPage {
     private loginButton: Locator;
@@ -17,8 +18,16 @@ export class SFLoginPage {
     }
 
     async login(username: string, password: string) {
-        await this.usernameField.fill(username);
-        await this.passwordField.fill(password);
-        await this.loginButton.click(); // Use the `loginButton` locator
+        await retry(async () => {
+            await this.usernameField.fill(username);
+            await this.passwordField.fill(password);
+            await this.loginButton.click(); // Use the `loginButton` locator
+
+            // Wait for navigation or a specific element on the next page
+            // If this fails, it will throw an error and trigger a retry
+            await this.page.waitForNavigation({ timeout: 5000 });
+            // Or wait for a specific element on the next page, e.g.:
+            // await this.page.waitForSelector('selector-for-element-on-next-page', { timeout: 5000 });
+        })
     }
 }

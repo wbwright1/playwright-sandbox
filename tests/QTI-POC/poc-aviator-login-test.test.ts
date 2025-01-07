@@ -27,5 +27,5 @@ test('Login using Page file', async ({ page }) => {
   await loginPage.login('automation.testing@goosehead.com.uat', 'GHnov2022$');
 
   // Add assertions to verify successful login
-  await expect(page.getByRole('heading', { name: 'Property Address' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Let’s Do This' })).toBeVisible();
 });
