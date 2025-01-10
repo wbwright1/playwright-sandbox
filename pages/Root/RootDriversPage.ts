@@ -2,8 +2,9 @@ import { Page, Locator } from "@playwright/test";
 import { DriverInfo } from "../../tests/utils/driverInfoUtils";
 import { retry } from "../../tests/utils/retryUtils";
 
-export class AviatorDriversPage {
+export class RootDriversPage {
   private heading: Locator;
+  private discoveredDriverField: Locator;
   private deleteDriverButton: Locator;
   private deleteOtherDriverButton: Locator;
   private driverLicenseField: Locator;
@@ -14,7 +15,7 @@ export class AviatorDriversPage {
   private addDriverButton: Locator;
 
   constructor(private page: Page) {
-    this.heading = page.getByRole("heading", { name: "Drivers" });
+    this.heading = page.getByRole("heading", { name: "Driver Review" });
     this.addDriverButton = page.getByRole("button", { name: "add driver" });
     this.deleteDriverButton = page.getByLabel("delete driver").first();
     this.deleteOtherDriverButton = page.getByLabel("delete driver").nth(1);

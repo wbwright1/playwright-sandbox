@@ -1,4 +1,5 @@
-import { test, expect } from "./fixtures/pocTestDataFixture";
+import { test, expect } from "./fixtures/pocQTIRootTestData";
+import { Page } from "@playwright/test";
 import { SFLoginPage } from "../../pages/SFLoginPage";
 import {
   AviatorAddressPage,
@@ -8,6 +9,8 @@ import {
   AviatorPriorPolicyPage,
   AviatorResponsePage,
 } from "../../pages/Aviator";
+import { RootBasicInformationPage } from "../../pages/Root/RootBasicInformationPage";
+import { RootDriversPage } from "../../pages/Root/RootDriversPage";
 
 test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   test.setTimeout(60000);
@@ -20,15 +23,13 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   const aviatorPriorPolicyPage = new AviatorPriorPolicyPage(page);
   const aviatorResponsePage = new AviatorResponsePage(page);
 
+  let rootBasicInformationPage: RootBasicInformationPage;
+  let rootDriversPage: RootDriversPage;
+
   await sfLoginPage.navigateToLogin();
   await sfLoginPage.login("automation.testing@goosehead.com.uat", "GHnov2022$");
 
   await aviatorAddressPage.fillAddressPageWithRetry(testData.address, 2);
-  //   await aviatorAddressPage.selectFirstAddressOption();
-  //   await aviatorAddressPage.selectLeadSource(2);
-  //   await aviatorAddressPage.clickLetsDoThis();
-  //   await page.waitForNavigation({ timeout: 5000 });
-  //   await aviatorAddressPage.clickOnlyQuoteAuto();
 
   await aviatorClientInfoPage.fillClientInfo(
     testData.firstName,
@@ -44,7 +45,6 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   await aviatorClientInfoPage.clickContinue(() =>
     aviatorDriversPage.checkHeading()
   );
-  //await aviatorClientInfoPage.clickContinue();
 
   await aviatorDriversPage.deleteAllDrivers();
   await aviatorDriversPage.fillPrimaryDriverInfo(
@@ -53,32 +53,8 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
     testData.education
   );
   await aviatorDriversPage.selectPrimaryOccupation();
-  //   await page.getByRole('button', { name: 'add driver' }).click();
-  //   await aviatorDriversPage.addMultipleDrivers([
-  //           {
-  //               firstName: 'John',
-  //               lastName: 'Doe',
-  //               dob: '01/01/1980',
-  //               gender: 'Male',
-  //               license: '00000001',
-  //               state: 'TX',
-  //               education: 'Some College'
-  //           },
-  //           {
-  //               firstName: 'Jane',
-  //               lastName: 'Smith',
-  //               dob: '02/15/1985',
-  //               gender: 'Female',
-  //               suffix: 'Jr',
-  //               license: '00000002',
-  //               state: 'CA',
-  //               education: 'Bachelor\'s Degree'
-  //           },
-  //           // ... up to 6 drivers
-  //       ]);
 
   // Sending next expected page so it will wait for it to load prior to running next step
-
   await aviatorDriversPage.clickContinue(() =>
     aviatorVehiclesPage.checkHeading()
   );
@@ -99,5 +75,16 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
     aviatorResponsePage.checkHeading()
   );
 
-  await aviatorResponsePage.waitForProgressiveQuote();
+  await aviatorResponsePage.waitForRootQuote();
+  const newPage = await aviatorResponsePage.openRootQTI();
+
+  // Initialize page objects with the new page
+  rootBasicInformationPage = new RootBasicInformationPage(newPage);
+  rootDriversPage = new RootDriversPage(newPage);
+
+  await rootBasicInformationPage.clickContinue(() =>
+    rootDriversPage.checkHeading()
+  );
+
+  //await rootDriversPage.clickContinue();
 });
