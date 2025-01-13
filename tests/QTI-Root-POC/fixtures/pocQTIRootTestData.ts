@@ -1,8 +1,7 @@
 import { test as base } from "@playwright/test";
 import { generateRandomString } from "../../utils/randomStringUtils";
 
-type TestData = {
-  address: string;
+type Driver = {
   firstName: string;
   lastName: string;
   dob: string;
@@ -13,31 +12,79 @@ type TestData = {
   driverLicense: string;
   dLState: string;
   education: string;
+};
+
+type Vehicle = {
   vin: string;
+  make: string;
+  model: string;
+  year: number;
+  assignedDriver: string; // This will map to a driver's name, e.g., "Richard King"
+  ownershipType: string;
+};
+
+type TestData = {
+  address: string;
   priorCarrier: string;
   yearsWithCarrier: string;
   liabilityLimits: string;
+  drivers: Driver[];
+  vehicles: Vehicle[];
 };
 
 export const test = base.extend<{ testData: TestData }>({
   testData: async ({}, use) => {
     const data: TestData = {
       address: "8607 Concerto Cir",
-      firstName: "Richard",
-      lastName: "King",
-      dob: "07/07/1977",
-      gender: "Male",
-      maritalStatus: "Single",
-      phone: "4945436738",
-      email: `${generateRandomString(10)}@test.com`,
-      driverLicense: "00000040",
-      dLState: "TX",
-      education: "Some College",
-      vin: "JH4DA9340NS001774",
       priorCarrier: "Allstate",
       yearsWithCarrier: "3",
       liabilityLimits: "100/300",
+      drivers: [
+        {
+          firstName: "Richard",
+          lastName: "King",
+          dob: "01/01/1944",
+          gender: "Male",
+          maritalStatus: "Single",
+          phone: "5555555555",
+          email: `${generateRandomString(10)}@test.com`,
+          driverLicense: "00000004",
+          dLState: "TX",
+          education: "Some College",
+        },
+        {
+          firstName: "Sarah",
+          lastName: "Smith",
+          dob: "03/22/1980",
+          gender: "Female",
+          maritalStatus: "Married",
+          phone: "5555555556",
+          email: `${generateRandomString(10)}@test.com`,
+          driverLicense: "00000005",
+          dLState: "CA",
+          education: "Bachelor's Degree",
+        },
+      ],
+      vehicles: [
+        {
+          vin: "JH4DA9340NS001774",
+          make: "Honda",
+          model: "Civic",
+          year: 2020,
+          assignedDriver: "Richard King", // Maps to driver 1
+          ownershipType: "Own",
+        },
+        {
+          vin: "1HGCM82633A123456",
+          make: "Toyota",
+          model: "Corolla",
+          year: 2019,
+          assignedDriver: "Sarah Smith", // Maps to driver 2
+          ownershipType: "Own",
+        },
+      ],
     };
+
     await use(data);
   },
 });

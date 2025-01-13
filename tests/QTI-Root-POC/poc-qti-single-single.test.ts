@@ -1,5 +1,4 @@
 import { test, expect } from "./fixtures/pocQTIRootTestData";
-import { Page } from "@playwright/test";
 import { SFLoginPage } from "../../pages/SFLoginPage";
 import {
   AviatorAddressPage,
@@ -11,9 +10,12 @@ import {
 } from "../../pages/Aviator";
 import { RootBasicInformationPage } from "../../pages/Root/RootBasicInformationPage";
 import { RootDriversPage } from "../../pages/Root/RootDriversPage";
+import { RootVehiclesPage } from "../../pages/Root/RootVehiclesPage";
+import { RootCoveragesPage } from "../../pages/Root/RootCoveragesPage";
+import { RootPolicySummaryPage } from "../../pages/Root/RootPolicySummaryPage";
 
 test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
-  test.setTimeout(60000);
+  test.setTimeout(80000);
 
   const sfLoginPage = new SFLoginPage(page);
   const aviatorAddressPage = new AviatorAddressPage(page);
@@ -25,6 +27,9 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
 
   let rootBasicInformationPage: RootBasicInformationPage;
   let rootDriversPage: RootDriversPage;
+  let rootVehiclesPage: RootVehiclesPage;
+  let rootCoveragesPage: RootCoveragesPage;
+  let rootPolicySummaryPage: RootPolicySummaryPage;
 
   await sfLoginPage.navigateToLogin();
   await sfLoginPage.login("automation.testing@goosehead.com.uat", "GHnov2022$");
@@ -32,14 +37,16 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   await aviatorAddressPage.fillAddressPageWithRetry(testData.address, 2);
 
   await aviatorClientInfoPage.fillClientInfo(
-    testData.firstName,
-    testData.lastName,
-    testData.dob,
-    testData.email
+    testData.drivers[0].firstName,
+    testData.drivers[0].lastName,
+    testData.drivers[0].dob,
+    testData.drivers[0].email
   );
-  await aviatorClientInfoPage.selectGender(testData.gender);
-  await aviatorClientInfoPage.selectMaritalStatus(testData.maritalStatus);
-  await aviatorClientInfoPage.fillPhoneNumber(testData.phone);
+  await aviatorClientInfoPage.selectGender(testData.drivers[0].gender);
+  await aviatorClientInfoPage.selectMaritalStatus(
+    testData.drivers[0].maritalStatus
+  );
+  await aviatorClientInfoPage.fillPhoneNumber(testData.drivers[0].phone);
 
   // Sending next expected page so it will wait for it to load prior to running next step
   await aviatorClientInfoPage.clickContinue(() =>
@@ -48,9 +55,9 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
 
   await aviatorDriversPage.deleteAllDrivers();
   await aviatorDriversPage.fillPrimaryDriverInfo(
-    testData.driverLicense,
-    testData.dLState,
-    testData.education
+    testData.drivers[0].driverLicense,
+    testData.drivers[0].dLState,
+    testData.drivers[0].education
   );
   await aviatorDriversPage.selectPrimaryOccupation();
 
@@ -61,7 +68,7 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   //await aviatorDriversPage.clickContinue();
 
   await aviatorVehiclesPage.deleteAllVehicles();
-  await aviatorVehiclesPage.fillVehicleInfo(testData.vin);
+  await aviatorVehiclesPage.fillVehicleInfo(testData.vehicles[0].vin);
   await aviatorVehiclesPage.clickContinue(() =>
     aviatorPriorPolicyPage.checkHeading()
   );
@@ -81,10 +88,40 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   // Initialize page objects with the new page
   rootBasicInformationPage = new RootBasicInformationPage(newPage);
   rootDriversPage = new RootDriversPage(newPage);
+  rootVehiclesPage = new RootVehiclesPage(newPage);
+  rootCoveragesPage = new RootCoveragesPage(newPage);
+  rootPolicySummaryPage = new RootPolicySummaryPage(newPage);
 
   await rootBasicInformationPage.clickContinue(() =>
     rootDriversPage.checkHeading()
   );
 
-  //await rootDriversPage.clickContinue();
+  await rootDriversPage.setDriverExclusionValues("Unknown to Applicant");
+  await rootDriversPage.clickContinue(() => rootVehiclesPage.checkHeading());
+
+  // Example: Set all fields to "default-value", except the 3rd one to "custom-value"
+  await rootVehiclesPage.setVehicleExclusionValues("Unknown to Applicant");
+  await rootVehiclesPage.assignDriversToVehicles(testData.vehicles);
+  await rootVehiclesPage.setOwnershipType(testData.vehicles);
+
+  await rootVehiclesPage.clickContinue(() => rootCoveragesPage.checkHeading());
+  // await page6.getByLabel('Chase Home Finance, LLC').click();
+
+  await rootCoveragesPage.setRideshare("false");
+  // await rootCoveragesPage.setBodilyInjury("$50,000 / $100,000");
+  // await rootCoveragesPage.setPropertyDamage("$25,000");
+  // await rootCoveragesPage.setUninsuredUnderinsuredBodily("$100,000 / $300,000");
+  // await rootCoveragesPage.setUninsuredUnderinsuredPropertyDamage("$50,000");
+  // await rootCoveragesPage.setPersonalInjuryProtection("$2,500");
+  // await rootCoveragesPage.setMedicalPayments("$500");
+
+  await rootCoveragesPage.clickContinue(() =>
+    rootPolicySummaryPage.checkHeading()
+  );
+
+  await rootPolicySummaryPage.checkConsumerDisclosure();
+  // await page7.getByRole('checkbox').check();
+  // await page7.getByRole('button', { name: 'Continue & Run Reports' }).click();
+  // await page7.getByRole('button', { name: 'Continue to Checkout' }).click();
+  // await page7.getByRole('button', { name: 'Next Step' }).click();
 });

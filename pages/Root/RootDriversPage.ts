@@ -4,15 +4,14 @@ import { retry } from "../../tests/utils/retryUtils";
 
 export class RootDriversPage {
   private heading: Locator;
-  private discoveredDriverField: Locator;
   private deleteDriverButton: Locator;
   private deleteOtherDriverButton: Locator;
   private driverLicenseField: Locator;
   private dLStateDropdown: Locator;
   private educationDropdown: Locator;
   private occupationField: Locator;
-  private continueButton: Locator;
   private addDriverButton: Locator;
+  private continueButton: Locator;
 
   constructor(private page: Page) {
     this.heading = page.getByRole("heading", { name: "Driver Review" });
@@ -32,6 +31,25 @@ export class RootDriversPage {
 
   async checkHeading() {
     await this.heading.waitFor({ state: "visible" });
+  }
+
+  async setDriverExclusionValues(
+    discoveredVehicleStatus: string
+  ): Promise<void> {
+    const fields = this.page.locator('[id^="input-driverExclusionSelect-"]');
+
+    // Get the total number of matching fields
+    const totalFields = await fields.count();
+
+    if (totalFields === 0) {
+      console.log("No fields available to set.");
+      return;
+    }
+
+    // Iterate through all fields and set the value
+    for (let i = 0; i < totalFields; i++) {
+      await fields.nth(i).selectOption(discoveredVehicleStatus);
+    }
   }
 
   async addDriver(driverInfo: DriverInfo) {
