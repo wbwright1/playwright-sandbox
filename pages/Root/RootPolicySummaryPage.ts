@@ -3,8 +3,9 @@ import { retry } from "../../tests/utils/retryUtils";
 
 export class RootPolicySummaryPage {
   private heading: Locator;
-  private continueButton: Locator;
   private disclaimerCheckbox: Locator;
+  private continueButton: Locator;
+  private continueToCheckoutButton: Locator;
 
   constructor(private page: Page) {
     this.heading = page.getByRole("heading", { name: "Policy Summary" });
@@ -13,14 +14,14 @@ export class RootPolicySummaryPage {
   }
 
   async checkHeading() {
-    await this.heading.waitFor({ state: "visible" });
+    await this.heading.waitFor({ state: "visible" , timeout: 120000 });
   }
 
   async checkConsumerDisclosure() {
     await this.disclaimerCheckbox.click();
   }
 
-  async clickContinue(nextPageCheck: () => Promise<void>) {
+  async clickContinueAndRunReports(nextPageCheck: () => Promise<void>) {
     await this.continueButton.click();
     await nextPageCheck();
   }

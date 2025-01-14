@@ -30,7 +30,7 @@ export class RootDriversPage {
   }
 
   async checkHeading() {
-    await this.heading.waitFor({ state: "visible" });
+    await this.heading.waitFor({ state: "visible" , timeout: 120000 });
   }
 
   async setDriverExclusionValues(

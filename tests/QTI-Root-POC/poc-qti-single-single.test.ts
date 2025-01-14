@@ -13,9 +13,11 @@ import { RootDriversPage } from "../../pages/Root/RootDriversPage";
 import { RootVehiclesPage } from "../../pages/Root/RootVehiclesPage";
 import { RootCoveragesPage } from "../../pages/Root/RootCoveragesPage";
 import { RootPolicySummaryPage } from "../../pages/Root/RootPolicySummaryPage";
+import { RootRunReportsModal } from "../../pages/Root/RootRunReportsModal";
+import { RootCheckoutPage } from "../../pages/Root/RootCheckoutPage";
 
 test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
-  test.setTimeout(80000);
+  test.setTimeout(240000);
 
   const sfLoginPage = new SFLoginPage(page);
   const aviatorAddressPage = new AviatorAddressPage(page);
@@ -30,6 +32,8 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   let rootVehiclesPage: RootVehiclesPage;
   let rootCoveragesPage: RootCoveragesPage;
   let rootPolicySummaryPage: RootPolicySummaryPage;
+  let rootRunReportsModal: RootRunReportsModal;
+  let rootCheckoutPage: RootCheckoutPage;
 
   await sfLoginPage.navigateToLogin();
   await sfLoginPage.login("automation.testing@goosehead.com.uat", "GHnov2022$");
@@ -91,6 +95,8 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   rootVehiclesPage = new RootVehiclesPage(newPage);
   rootCoveragesPage = new RootCoveragesPage(newPage);
   rootPolicySummaryPage = new RootPolicySummaryPage(newPage);
+  rootRunReportsModal = new RootRunReportsModal(newPage);
+  rootCheckoutPage = new RootCheckoutPage(newPage);
 
   await rootBasicInformationPage.clickContinue(() =>
     rootDriversPage.checkHeading()
@@ -120,8 +126,24 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   );
 
   await rootPolicySummaryPage.checkConsumerDisclosure();
-  // await page7.getByRole('checkbox').check();
-  // await page7.getByRole('button', { name: 'Continue & Run Reports' }).click();
-  // await page7.getByRole('button', { name: 'Continue to Checkout' }).click();
-  // await page7.getByRole('button', { name: 'Next Step' }).click();
+  await rootPolicySummaryPage.clickContinueAndRunReports(() => rootRunReportsModal.checkHeading());
+  
+  await rootRunReportsModal.clickContinueToCheckout(() => rootCheckoutPage.checkHeading());
+
+
+  await rootCheckoutPage.selectMonthlyPay();
+  await rootCheckoutPage.clickNextStep();
+
+
+
+  const cardDetails = {
+    cardHolderName: "Richard King",
+    cardNumber: "4111111111111111", // Example Visa test card
+    expirationDate: "03/30",
+    cvv: "737",
+  };
+  await rootCheckoutPage.fillCreditCardInformation(cardDetails);
+
+  //await page5.locator('iframe[name="braintree-hosted-field-number"]').click();
+
 });

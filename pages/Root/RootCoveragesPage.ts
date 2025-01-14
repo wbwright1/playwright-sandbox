@@ -40,7 +40,7 @@ export class RootCoveragesPage {
   }
 
   async checkHeading() {
-    await this.heading.waitFor({ state: "visible" });
+    await this.heading.waitFor({ state: "visible" , timeout: 120000 });
   }
 
   // Private method to select an option by label

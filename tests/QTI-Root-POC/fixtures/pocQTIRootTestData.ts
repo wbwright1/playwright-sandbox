@@ -23,6 +23,15 @@ type Vehicle = {
   ownershipType: string;
 };
 
+type PaymentDetails = {
+  cardHolderName: string;
+  cardNumber: string;
+  expirationDate: string;
+  cvv: string;
+  billingAddress: string;
+  zipCode: string;
+};
+
 type TestData = {
   address: string;
   priorCarrier: string;
@@ -30,6 +39,7 @@ type TestData = {
   liabilityLimits: string;
   drivers: Driver[];
   vehicles: Vehicle[];
+  paymentDetails: PaymentDetails;
 };
 
 export const test = base.extend<{ testData: TestData }>({
@@ -83,6 +93,14 @@ export const test = base.extend<{ testData: TestData }>({
           ownershipType: "Own",
         },
       ],
+      paymentDetails: {
+        cardHolderName: "Richard King",
+        cardNumber: "4111111111111111", // Example Visa test card number
+        expirationDate: "12/25",
+        cvv: "737",
+        billingAddress: "8607 Concerto Cir",
+        zipCode: "75034",
+      },
     };
 
     await use(data);
