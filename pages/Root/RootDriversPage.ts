@@ -6,12 +6,14 @@ type Driver = {
   firstName: string;
   lastName: string;
   dob: string;
+  driverStatus?: string;
   gender: string;
   maritalStatus: string;
   phone: string;
   email: string;
   driverLicense: string;
   dLState: string;
+  yearsLicensed?: string;
   education: string;
 };
 
@@ -59,18 +61,22 @@ export class RootDriversPage {
     await selectDropdownOptions(this.page, fieldsLocator, values);
   }
 
-  async addDriver(driverOrDrivers: Driver | Driver[]) {
+  async addDrivers(driverOrDrivers: Driver | Driver[]) {
     const drivers = Array.isArray(driverOrDrivers) ? driverOrDrivers : [driverOrDrivers];
 
-    for (const driver of drivers) {
-      const index = await drivers.length;
-
-      if (index > 1) {
+    for (let i = 0; i < drivers.length; i++) {
+      const driver = drivers[i];
+  
+      if (i > 0) {
+        // Add a new driver button click only for subsequent drivers
         await this.addDriverButton.click();
         await this.page.waitForTimeout(500); // Optional: Wait for UI update
       }
-
-      await this.fillAdditionalDriverInfo(driver, index);
+  
+      // Skip `fillAdditionalDriverInfo` for the first driver
+      if (i > 0) {
+        await this.fillAdditionalDriverInfo(driver, i);
+      }
     }
   }
 
@@ -111,16 +117,18 @@ export class RootDriversPage {
   }
 
   private async fillAdditionalDriverInfo(driver: Driver, index: number) {
-    const adjustedIndex = index - 2; // Adjust index to match the locators starting from 1
-    if (index === 1) {
-      console.log('Skipping driver 1');
-      return;
-    }
+    const adjustedIndex = index; // Adjust index to match the locators starting from 1
     
     await this.page.fill(`input[id="input-firstNameInput-${adjustedIndex}"]`, driver.firstName);
     await this.page.fill(`input[id="input-lastNameInput-${adjustedIndex}"]`, driver.lastName);
     await this.page.type(`input[id="input-dobInput-${adjustedIndex}"]`, driver.dob);
   
+    // Coverage Status dropdown
+    await this.page.locator(`button[id="input-driverStatusInput-${adjustedIndex}"]`).click();
+    // await this.page.click(`[id="input-driverStatusInput-${adjustedIndex}"] >> text="${driver.driverStatus}"`);
+    await this.page.click(`text=${driver.driverStatus}" >> nth=${index+1}`);
+//li[text="${driver.driverStatus}"]
+
     // Gender dropdown
     await this.page.locator(`button[id="input-genderInput-${adjustedIndex}"]`).click();
     await this.page.click(`text="${driver.gender}"`);
@@ -129,11 +137,16 @@ export class RootDriversPage {
     await this.page.locator(`button[id="input-maritalStatusInput-${adjustedIndex}"]`).click();
     await this.page.click(`text="${driver.maritalStatus}"`);
   
-    await this.page.fill(`input[id="input-driversLicenseInput-${adjustedIndex}"]`, driver.driverLicense);
+    // Drivers License input
+    await this.page.fill(`input[id="input-licenseNumber-${adjustedIndex}"]`, driver.driverLicense);
   
-    // State dropdown
-    await this.page.locator(`button[id="input-driversLicenseState-${adjustedIndex}"]`).click();
+    // Drivers License State dropdown
+    await this.page.locator(`button[id="input-licenseStateInput-${adjustedIndex}"]`).click();
     await this.page.click(`text="${driver.dLState}"`);
+  
+    // Years Licensed dropdown
+    await this.page.locator(`button[id="input-yearsLicensed-${adjustedIndex}"]`).click();
+    await this.page.click(`[id="input-yearsLicensed-${adjustedIndex}"] >> text="${driver.yearsLicensed}"`);
   
     // Education dropdown
     await this.page.locator(`button[id="input-education-${adjustedIndex}"]`).click();
@@ -155,12 +168,6 @@ export class RootDriversPage {
 
   async getDriverCount(): Promise<number> {
     return await this.page.locator(".driver-info-section").count();
-  }
-
-  async addMultipleDrivers(drivers: DriverInfo[]) {
-    for (const driver of drivers) {
-      await this.addDriver(driver);
-    }
   }
 
   async clickContinue(nextPageCheck: () => Promise<void>) {

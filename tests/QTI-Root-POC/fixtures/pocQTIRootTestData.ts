@@ -4,6 +4,7 @@ import { generateRandomString } from "../../utils/randomStringUtils";
 type Driver = {
   firstName: string;
   lastName: string;
+  driverStatus?: string;
   dob: string;
   gender: string;
   maritalStatus: string;
@@ -11,6 +12,7 @@ type Driver = {
   email: string;
   driverLicense: string;
   dLState: string;
+  yearsLicensed?: string;
   education: string;
 };
 
@@ -67,13 +69,15 @@ export const test = base.extend<{ testData: TestData }>({
         {
           firstName: "Sarah",
           lastName: "Smith",
+          driverStatus: "Covered",
           dob: "03/22/1980",
           gender: "Female",
           maritalStatus: "Married",
           phone: "5555555556",
           email: `${generateRandomString(10)}@test.com`,
           driverLicense: "00000005",
-          dLState: "CA",
+          dLState: "TX",
+          yearsLicensed: "3 years or more",
           education: "Bachelor's Degree",
         },
       ],

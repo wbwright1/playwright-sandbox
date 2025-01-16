@@ -106,7 +106,7 @@ test("Aviator - Multi Driver / Multi Vehicle", async ({ page, testData }) => {
   );
 
   await rootDriversPage.setDriverExclusionValues("Unknown to Applicant");
-  await rootDriversPage.addDriver(testData.drivers);
+  await rootDriversPage.addDrivers(testData.drivers);
   await rootDriversPage.clickContinue(() => rootVehiclesPage.checkHeading());
 
   // Example: Set all fields to "default-value", except the 3rd one to "custom-value"
