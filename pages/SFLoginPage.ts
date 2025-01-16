@@ -26,7 +26,7 @@ export class SFLoginPage {
   }
 
   async navigateToPreprodLogin() {
-    await this.page.goto("https://prepod.agent-quotes.goosehead.com/");
+    await this.page.goto("https://preprod.agent-quotes.goosehead.com/agent/Auto/Responses");
   }
 
   async login(username: string, password: string) {

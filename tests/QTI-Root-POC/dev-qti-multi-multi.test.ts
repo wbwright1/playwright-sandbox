@@ -17,7 +17,7 @@ import { RootRunReportsModal } from "../../pages/Root/RootRunReportsModal";
 import { RootCheckoutPage } from "../../pages/Root/RootCheckoutPage";
 import { RootSuccessPage } from "../../pages/Root/RootSuccessPage";
 
-test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
+test("Aviator - Multi Driver / Multi Vehicle", async ({ page, testData }) => {
   test.setTimeout(240000);
 
   const sfLoginPage = new SFLoginPage(page);
@@ -37,7 +37,7 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   let rootCheckoutPage: RootCheckoutPage;
   let rootSuccessPage: RootSuccessPage;
 
-  await sfLoginPage.navigateToPreprodLogin();
+  await sfLoginPage.navigateToDevLogin();
   await sfLoginPage.login("automation.testing@goosehead.com.uat", "GHnov2022$");
 
   await aviatorAddressPage.fillAddressPageWithRetry(testData.address, 2);
@@ -106,6 +106,7 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   );
 
   await rootDriversPage.setDriverExclusionValues("Unknown to Applicant");
+  await rootDriversPage.addDriver(testData.drivers);
   await rootDriversPage.clickContinue(() => rootVehiclesPage.checkHeading());
 
   // Example: Set all fields to "default-value", except the 3rd one to "custom-value"

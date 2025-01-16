@@ -2,6 +2,19 @@ import { Page, Locator } from "@playwright/test";
 import { DriverInfo } from "../../tests/utils/driverInfoUtils";
 import { selectDropdownOptions } from "../../tests/utils/selectDropdownOptions"; // Adjust path if needed
 
+type Driver = {
+  firstName: string;
+  lastName: string;
+  dob: string;
+  gender: string;
+  maritalStatus: string;
+  phone: string;
+  email: string;
+  driverLicense: string;
+  dLState: string;
+  education: string;
+};
+
 export class RootDriversPage {
   private heading: Locator;
   private deleteDriverButton: Locator;
@@ -15,7 +28,7 @@ export class RootDriversPage {
 
   constructor(private page: Page) {
     this.heading = page.getByRole("heading", { name: "Driver Review" });
-    this.addDriverButton = page.getByRole("button", { name: "add driver" });
+    this.addDriverButton = page.getByTestId('content-container-component').getByTestId('add-button')
     this.deleteDriverButton = page.getByLabel("delete driver").first();
     this.deleteOtherDriverButton = page.getByLabel("delete driver").nth(1);
     this.driverLicenseField = page.locator(
@@ -46,13 +59,19 @@ export class RootDriversPage {
     await selectDropdownOptions(this.page, fieldsLocator, values);
   }
 
-  async addDriver(driverInfo: DriverInfo) {
-    const index = await this.getDriverCount();
-    if (index > 0) {
-      await this.addDriverButton.click();
-      await this.page.waitForTimeout(500);
+  async addDriver(driverOrDrivers: Driver | Driver[]) {
+    const drivers = Array.isArray(driverOrDrivers) ? driverOrDrivers : [driverOrDrivers];
+
+    for (const driver of drivers) {
+      const index = await drivers.length;
+
+      if (index > 1) {
+        await this.addDriverButton.click();
+        await this.page.waitForTimeout(500); // Optional: Wait for UI update
+      }
+
+      await this.fillAdditionalDriverInfo(driver, index);
     }
-    await this.fillAdditionalDriverInfo(driverInfo, index);
   }
 
   async deleteAllDrivers() {
@@ -91,41 +110,34 @@ export class RootDriversPage {
     await this.page.click(`text="${education}"`);
   }
 
-  async fillAdditionalDriverInfo(driverInfo: DriverInfo, index: number) {
-    await this.page.fill(
-      `input[name="items.${index}.firstName"]`,
-      driverInfo.firstName
-    );
-    await this.page.fill(
-      `input[name="items.${index}.lastName"]`,
-      driverInfo.lastName
-    );
-    await this.page.fill(
-      `input[name="items.${index}.dateOfBirth"]`,
-      driverInfo.dob
-    );
-
-    // Gender dropdown
-    await this.page.locator(`button[name="items.${index}.gender"]`).click();
-    await this.page.click(`text="${driverInfo.gender}"`);
-
-    if (driverInfo.suffix) {
-      await this.page.locator(`button[name="items.${index}.suffix"]`).click();
-      await this.page.click(`text="${driverInfo.suffix}"`);
+  private async fillAdditionalDriverInfo(driver: Driver, index: number) {
+    const adjustedIndex = index - 2; // Adjust index to match the locators starting from 1
+    if (index === 1) {
+      console.log('Skipping driver 1');
+      return;
     }
-
-    await this.page.fill(
-      `input[name="items.${index}.driverLicense"]`,
-      driverInfo.license
-    );
-
+    
+    await this.page.fill(`input[id="input-firstNameInput-${adjustedIndex}"]`, driver.firstName);
+    await this.page.fill(`input[id="input-lastNameInput-${adjustedIndex}"]`, driver.lastName);
+    await this.page.type(`input[id="input-dobInput-${adjustedIndex}"]`, driver.dob);
+  
+    // Gender dropdown
+    await this.page.locator(`button[id="input-genderInput-${adjustedIndex}"]`).click();
+    await this.page.click(`text="${driver.gender}"`);
+  
+    // Marital status dropdown
+    await this.page.locator(`button[id="input-maritalStatusInput-${adjustedIndex}"]`).click();
+    await this.page.click(`text="${driver.maritalStatus}"`);
+  
+    await this.page.fill(`input[id="input-driversLicenseInput-${adjustedIndex}"]`, driver.driverLicense);
+  
     // State dropdown
-    await this.page.locator(`button[name="items.${index}.dLState"]`).click();
-    await this.page.click(`text="${driverInfo.state}"`);
-
+    await this.page.locator(`button[id="input-driversLicenseState-${adjustedIndex}"]`).click();
+    await this.page.click(`text="${driver.dLState}"`);
+  
     // Education dropdown
-    await this.page.locator(`button[name="items.${index}.education"]`).click();
-    await this.page.click(`text="${driverInfo.education}"`);
+    await this.page.locator(`button[id="input-education-${adjustedIndex}"]`).click();
+    await this.page.click(`text="${driver.education}"`);
   }
 
   async selectPrimaryOccupation() {
