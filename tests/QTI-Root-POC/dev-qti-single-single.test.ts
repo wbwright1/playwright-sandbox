@@ -37,7 +37,7 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   let rootCheckoutPage: RootCheckoutPage;
   let rootSuccessPage: RootSuccessPage;
 
-  await sfLoginPage.navigateToUATLogin();
+  await sfLoginPage.navigateToDevLogin();
   await sfLoginPage.login("automation.testing@goosehead.com.uat", "GHnov2022$");
 
   await aviatorAddressPage.fillAddressPageWithRetry(testData.address, 2);

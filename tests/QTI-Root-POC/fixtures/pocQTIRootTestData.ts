@@ -40,6 +40,7 @@ type TestData = {
   drivers: Driver[];
   vehicles: Vehicle[];
   paymentDetails: PaymentDetails;
+  rideshare: string;
 };
 
 export const test = base.extend<{ testData: TestData }>({
@@ -49,6 +50,7 @@ export const test = base.extend<{ testData: TestData }>({
       priorCarrier: "Allstate",
       yearsWithCarrier: "3",
       liabilityLimits: "100/300",
+      rideshare: "No",
       drivers: [
         {
           firstName: "Richard",
@@ -96,7 +98,7 @@ export const test = base.extend<{ testData: TestData }>({
       paymentDetails: {
         cardHolderName: "Richard King",
         cardNumber: "4111111111111111", // Example Visa test card number
-        expirationDate: "12/25",
+        expirationDate: "03/30",
         cvv: "737",
         billingAddress: "8607 Concerto Cir",
         zipCode: "75034",

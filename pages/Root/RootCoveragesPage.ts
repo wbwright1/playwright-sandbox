@@ -40,50 +40,54 @@ export class RootCoveragesPage {
   }
 
   async checkHeading() {
-    await this.heading.waitFor({ state: "visible" , timeout: 120000 });
+    await this.heading.waitFor({ state: "visible" });
   }
 
-  // Private method to select an option by label
-  private async selectOptionByLocator(
+  // Private method to click and select an option by label text
+  private async clickOptionByLocator(
     locator: Locator,
-    optionValue: string
+    optionText: string
   ): Promise<void> {
-    await locator.selectOption(optionValue);
+    // Click the dropdown (button)
+    await locator.click();
+
+    // Click on the option that matches the optionText
+    await this.page.locator(`text="${optionText}"`).click();
   }
 
   // Public methods for interacting with the fields
   async setRideshare(value: string): Promise<void> {
-    await this.selectOptionByLocator(this.rideshareField, value);
+    await this.clickOptionByLocator(this.rideshareField, value);
   }
 
   async setBodilyInjury(value: string): Promise<void> {
-    await this.selectOptionByLocator(this.bodilyInjuryField, value);
+    await this.clickOptionByLocator(this.bodilyInjuryField, value);
   }
 
   async setPropertyDamage(value: string): Promise<void> {
-    await this.selectOptionByLocator(this.propertyDamageField, value);
+    await this.clickOptionByLocator(this.propertyDamageField, value);
   }
 
   async setUninsuredUnderinsuredBodily(value: string): Promise<void> {
-    await this.selectOptionByLocator(
+    await this.clickOptionByLocator(
       this.uninsuredUnderinsuredBodilyField,
       value
     );
   }
 
   async setUninsuredUnderinsuredPropertyDamage(value: string): Promise<void> {
-    await this.selectOptionByLocator(
+    await this.clickOptionByLocator(
       this.uninsuredUnderinsuredPropertyDamageField,
       value
     );
   }
 
   async setPersonalInjuryProtection(value: string): Promise<void> {
-    await this.selectOptionByLocator(this.personalInjuryProtectionField, value);
+    await this.clickOptionByLocator(this.personalInjuryProtectionField, value);
   }
 
   async setMedicalPayments(value: string): Promise<void> {
-    await this.selectOptionByLocator(this.medicalPaymentsField, value);
+    await this.clickOptionByLocator(this.medicalPaymentsField, value);
   }
 
   async clickContinue(nextPageCheck: () => Promise<void>) {

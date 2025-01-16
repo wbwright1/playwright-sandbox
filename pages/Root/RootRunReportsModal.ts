@@ -8,14 +8,20 @@ export class RootRunReportsModal {
   private continueToCheckoutButton: Locator;
 
   constructor(private page: Page) {
-    this.heading = page.getByRole("heading", { name: "Here is the final rate!" });
+    this.heading = page.getByRole("heading", {
+      name: "Here is the final rate!",
+    });
     this.editQuoteButton = page.getByRole("button", { name: "Edit Quote" });
-    this.returnToAviatorQuotesButton = page.getByText("Return to Aviator Quotes");
-    this.continueToCheckoutButton = page.getByRole("button", { name: "Continue to Checkout" });
+    this.returnToAviatorQuotesButton = page.getByText(
+      "Return to Aviator Quotes"
+    );
+    this.continueToCheckoutButton = page.getByRole("button", {
+      name: "Continue to Checkout",
+    });
   }
 
   async checkHeading() {
-    await this.heading.waitFor({ state: "visible" , timeout: 120000 });
+    await this.heading.waitFor({ state: "visible" });
   }
 
   async clickEditQuote() {
@@ -43,7 +49,7 @@ export class RootRunReportsModal {
   }
 
   async clickContinueToCheckout(nextPageCheck: () => Promise<void>) {
-      await this.continueToCheckoutButton.click();
-      await nextPageCheck();
+    await this.continueToCheckoutButton.click();
+    await nextPageCheck();
   }
 }

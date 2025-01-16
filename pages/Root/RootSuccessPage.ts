@@ -1,13 +1,13 @@
 import { Page, Locator } from "@playwright/test";
 import { retry } from "../../tests/utils/retryUtils";
 
-export class RootPolicySummaryPage {
+export class RootSuccessPage {
   private heading: Locator;
   private disclaimerCheckbox: Locator;
   private continueButton: Locator;
 
   constructor(private page: Page) {
-    this.heading = page.getByRole("heading", { name: "Policy Summary" });
+    this.heading = page.getByRole("heading", { name: "Success!" });
     this.disclaimerCheckbox = page.getByRole("checkbox");
     this.continueButton = page.getByRole("button", { name: "Continue" });
   }

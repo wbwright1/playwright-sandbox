@@ -1,6 +1,6 @@
 import { Page, Locator } from "@playwright/test";
 import { DriverInfo } from "../../tests/utils/driverInfoUtils";
-import { retry } from "../../tests/utils/retryUtils";
+import { selectDropdownOptions } from "../../tests/utils/selectDropdownOptions"; // Adjust path if needed
 
 export class RootDriversPage {
   private heading: Locator;
@@ -21,8 +21,8 @@ export class RootDriversPage {
     this.driverLicenseField = page.locator(
       'input[name="items.0.driverLicense"]'
     );
-    this.dLStateDropdown = page.locator('select[name="items.0.dLState"]');
-    this.educationDropdown = page.locator('select[name="items.0.education"]');
+    this.dLStateDropdown = page.locator('button[name="items.0.dLState"]');
+    this.educationDropdown = page.locator('button[name="items.0.education"]');
     this.occupationField = page
       .locator(".type-ahead-select__input-container")
       .first();
@@ -30,33 +30,27 @@ export class RootDriversPage {
   }
 
   async checkHeading() {
-    await this.heading.waitFor({ state: "visible" , timeout: 120000 });
+    await this.heading.waitFor({ state: "visible" });
   }
 
   async setDriverExclusionValues(
-    discoveredVehicleStatus: string
+    discoveredDriverStatus: string
   ): Promise<void> {
-    const fields = this.page.locator('[id^="input-driverExclusionSelect-"]');
+    const fieldsLocator = '[id^="input-driverExclusionSelect-"]';
 
-    // Get the total number of matching fields
-    const totalFields = await fields.count();
+    // Create an array of values to be selected
+    const values = Array(await this.page.locator(fieldsLocator).count()).fill({
+      value: discoveredDriverStatus,
+    });
 
-    if (totalFields === 0) {
-      console.log("No fields available to set.");
-      return;
-    }
-
-    // Iterate through all fields and set the value
-    for (let i = 0; i < totalFields; i++) {
-      await fields.nth(i).selectOption(discoveredVehicleStatus);
-    }
+    await selectDropdownOptions(this.page, fieldsLocator, values);
   }
 
   async addDriver(driverInfo: DriverInfo) {
     const index = await this.getDriverCount();
     if (index > 0) {
       await this.addDriverButton.click();
-      await this.page.waitForTimeout(500); // Wait for the new driver form to appear
+      await this.page.waitForTimeout(500);
     }
     await this.fillAdditionalDriverInfo(driverInfo, index);
   }
@@ -87,8 +81,14 @@ export class RootDriversPage {
     education: string
   ) {
     await this.driverLicenseField.fill(license);
-    await this.dLStateDropdown.selectOption({ value: state });
-    await this.educationDropdown.selectOption({ value: education });
+
+    // Click dropdown and select value for state
+    await this.dLStateDropdown.click();
+    await this.page.click(`text="${state}"`);
+
+    // Click dropdown and select value for education
+    await this.dLStateDropdown.click();
+    await this.page.click(`text="${education}"`);
   }
 
   async fillAdditionalDriverInfo(driverInfo: DriverInfo, index: number) {
@@ -104,26 +104,28 @@ export class RootDriversPage {
       `input[name="items.${index}.dateOfBirth"]`,
       driverInfo.dob
     );
-    await this.page.selectOption(
-      `select[name="items.${index}.gender"]`,
-      driverInfo.gender
-    );
+
+    // Gender dropdown
+    await this.page.locator(`button[name="items.${index}.gender"]`).click();
+    await this.page.click(`text="${driverInfo.gender}"`);
+
     if (driverInfo.suffix) {
-      await this.page.selectOption(
-        `select[name="items.${index}.suffix"]`,
-        driverInfo.suffix
-      );
+      await this.page.locator(`button[name="items.${index}.suffix"]`).click();
+      await this.page.click(`text="${driverInfo.suffix}"`);
     }
+
     await this.page.fill(
       `input[name="items.${index}.driverLicense"]`,
       driverInfo.license
     );
-    await this.page.selectOption(`select[name="items.${index}.dLState"]`, {
-      value: driverInfo.state,
-    });
-    await this.page.selectOption(`select[name="items.${index}.education"]`, {
-      value: driverInfo.education,
-    });
+
+    // State dropdown
+    await this.page.locator(`button[name="items.${index}.dLState"]`).click();
+    await this.page.click(`text="${driverInfo.state}"`);
+
+    // Education dropdown
+    await this.page.locator(`button[name="items.${index}.education"]`).click();
+    await this.page.click(`text="${driverInfo.education}"`);
   }
 
   async selectPrimaryOccupation() {
@@ -148,10 +150,6 @@ export class RootDriversPage {
       await this.addDriver(driver);
     }
   }
-
-  //   async clickContinue() {
-  //     await this.continueButton.click();
-  //   }
 
   async clickContinue(nextPageCheck: () => Promise<void>) {
     await this.continueButton.click();

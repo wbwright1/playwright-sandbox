@@ -29,7 +29,7 @@ export class RootBasicInformationPage {
   }
 
   async checkHeading() {
-    await this.heading.waitFor({ state: "visible" , timeout: 120000 });
+    await this.heading.waitFor({ state: "visible" });
   }
 
   async fillClientInfo(email: string, phoneNumber: string) {
