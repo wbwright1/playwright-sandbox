@@ -25,12 +25,14 @@ export class AviatorClientInfoPage {
     firstName: string,
     lastName: string,
     dob: string,
-    email: string
+    email: string,
+    phone: string,
   ) {
     await this.firstNameField.fill(firstName);
     await this.lastNameField.fill(lastName);
     await this.dobField.type(dob);
-    await this.emailField.type(email);
+    await this.emailField.fill(email);
+    await this.phoneField.fill(phone);
   }
 
   async selectGender(gender: string) {
@@ -44,10 +46,6 @@ export class AviatorClientInfoPage {
   async fillPhoneNumber(phone: string) {
     await this.phoneField.fill(phone);
   }
-
-  // async clickContinue() {
-  //     await this.continueButton.click();
-  // }
 
   async clickContinue(nextPageCheck: () => Promise<void>) {
     await this.continueButton.click();

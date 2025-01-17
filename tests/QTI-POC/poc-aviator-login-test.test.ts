@@ -23,7 +23,7 @@ test('test', async ({ page }) => {
 test('Login using Page file', async ({ page }) => {
   const loginPage = new SFLoginPage(page);
 
-  await loginPage.navigateToLogin();
+  await loginPage.navigateToUATLogin();
   await loginPage.login('automation.testing@goosehead.com.uat', 'GHnov2022$');
 
   // Add assertions to verify successful login

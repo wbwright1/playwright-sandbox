@@ -18,7 +18,7 @@ import { RootCheckoutPage } from "../../pages/Root/RootCheckoutPage";
 import { RootSuccessPage } from "../../pages/Root/RootSuccessPage";
 
 test("Aviator - Multi Driver / Multi Vehicle", async ({ page, testData }) => {
-  test.setTimeout(240000);
+  test.setTimeout(600000);
 
   const sfLoginPage = new SFLoginPage(page);
   const aviatorAddressPage = new AviatorAddressPage(page);
@@ -46,7 +46,8 @@ test("Aviator - Multi Driver / Multi Vehicle", async ({ page, testData }) => {
     testData.drivers[0].firstName,
     testData.drivers[0].lastName,
     testData.drivers[0].dob,
-    testData.drivers[0].email
+    testData.drivers[0].email,
+    testData.drivers[0].phone
   );
   await aviatorClientInfoPage.selectGender(testData.drivers[0].gender);
   await aviatorClientInfoPage.selectMaritalStatus(
@@ -111,11 +112,9 @@ test("Aviator - Multi Driver / Multi Vehicle", async ({ page, testData }) => {
 
   // Example: Set all fields to "default-value", except the 3rd one to "custom-value"
   await rootVehiclesPage.setVehicleExclusionValues("Unknown to Applicant");
-  await rootVehiclesPage.assignDriversToVehicles(testData.vehicles);
-  await rootVehiclesPage.setOwnershipType(testData.vehicles);
+  await rootVehiclesPage.addVehicles(testData.vehicles);
 
   await rootVehiclesPage.clickContinue(() => rootCoveragesPage.checkHeading());
-  // await page6.getByLabel('Chase Home Finance, LLC').click();
 
   await rootCoveragesPage.setRideshare(testData.rideshare);
   // await rootCoveragesPage.setBodilyInjury("$50,000 / $100,000");

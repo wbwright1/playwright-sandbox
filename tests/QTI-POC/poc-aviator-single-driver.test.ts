@@ -171,5 +171,5 @@ test('Aviator - Single Driver / Single Vehicle', async ({ page }) => {
 
   // Wait for Progressive to show up in Aviator Results
   await page.locator('#quote-card-info-auto-progressive-false').waitFor({ state: 'visible' });
-
+  
 });

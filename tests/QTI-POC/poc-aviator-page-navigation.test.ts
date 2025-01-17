@@ -20,7 +20,7 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   const aviatorPriorPolicyPage = new AviatorPriorPolicyPage(page);
   const aviatorResponsePage = new AviatorResponsePage(page);
 
-  await sfLoginPage.navigateToLogin();
+  await sfLoginPage.navigateToUATLogin();
   await sfLoginPage.login("automation.testing@goosehead.com.uat", "GHnov2022$");
 
   await aviatorAddressPage.fillAddressPageWithRetry(testData.address, 2);
@@ -34,7 +34,8 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
     testData.firstName,
     testData.lastName,
     testData.dob,
-    testData.email
+    testData.email,
+    testData.phone
   );
   await aviatorClientInfoPage.selectGender(testData.gender);
   await aviatorClientInfoPage.selectMaritalStatus(testData.maritalStatus);

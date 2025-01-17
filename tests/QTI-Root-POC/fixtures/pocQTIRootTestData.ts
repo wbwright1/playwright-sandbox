@@ -21,8 +21,13 @@ type Vehicle = {
   make: string;
   model: string;
   year: number;
+  vehicleStatus: string;
   assignedDriver: string; // This will map to a driver's name, e.g., "Richard King"
   ownershipType: string;
+  garagingAddress?: string,
+  lienholder?: string,
+  antiTheft: string,
+  vinEtching: string,
 };
 
 type PaymentDetails = {
@@ -77,7 +82,7 @@ export const test = base.extend<{ testData: TestData }>({
           email: `${generateRandomString(10)}@test.com`,
           driverLicense: "00000005",
           dLState: "TX",
-          yearsLicensed: "3 years or more",
+          yearsLicensed: "More than 3 years",
           education: "Bachelor's Degree",
         },
       ],
@@ -87,16 +92,26 @@ export const test = base.extend<{ testData: TestData }>({
           make: "Honda",
           model: "Civic",
           year: 2020,
+          vehicleStatus: "Covered",
           assignedDriver: "Richard King", // Maps to driver 1
           ownershipType: "Own",
+          garagingAddress: "8607 Concerto Cir",
+          lienholder: "Wells Fargo",
+          antiTheft: "Yes",
+          vinEtching: "Yes",
         },
         {
-          vin: "1HGCM82633A123456",
+          vin: "3N1AB8CV6PY256201",
           make: "Toyota",
           model: "Corolla",
           year: 2019,
+          vehicleStatus: "Covered",
           assignedDriver: "Sarah Smith", // Maps to driver 2
           ownershipType: "Own",
+          garagingAddress: "8607 Concerto Cir",
+          lienholder: "Wells Fargo",
+          antiTheft: "Yes",
+          vinEtching: "Yes",
         },
       ],
       paymentDetails: {
