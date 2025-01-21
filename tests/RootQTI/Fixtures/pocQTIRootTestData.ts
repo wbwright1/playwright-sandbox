@@ -1,5 +1,5 @@
 import { test as base } from "@playwright/test";
-import { generateRandomString } from "../../utils/randomStringUtils";
+import { generateRandomString } from "../../shared/utils/randomStringUtils";
 
 type Driver = {
   firstName: string;
@@ -14,6 +14,7 @@ type Driver = {
   dLState: string;
   yearsLicensed?: string;
   education: string;
+  occupation: string;
 };
 
 type Vehicle = {
@@ -24,10 +25,10 @@ type Vehicle = {
   vehicleStatus: string;
   assignedDriver: string; // This will map to a driver's name, e.g., "Richard King"
   ownershipType: string;
-  garagingAddress?: string,
-  lienholder?: string,
-  antiTheft: string,
-  vinEtching: string,
+  garagingAddress?: string;
+  lienholder?: string;
+  antiTheft: string;
+  vinEtching: string;
 };
 
 type PaymentDetails = {
@@ -54,22 +55,23 @@ export const test = base.extend<{ testData: TestData }>({
   testData: async ({}, use) => {
     const data: TestData = {
       address: "8607 Concerto Cir",
-      priorCarrier: "Allstate",
+      priorCarrier: "Other - Standard",
       yearsWithCarrier: "3",
-      liabilityLimits: "100/300",
+      liabilityLimits: "250/500",
       rideshare: "No",
       drivers: [
         {
           firstName: "Richard",
           lastName: "King",
-          dob: "01/01/1944",
+          dob: "07/07/1977",
           gender: "Male",
           maritalStatus: "Single",
-          phone: "5555555555",
+          phone: "4945436738",
           email: `${generateRandomString(10)}@test.com`,
-          driverLicense: "00000004",
+          driverLicense: "12345678",
           dLState: "TX",
-          education: "Some College",
+          education: "Technical or Vocational School",
+          occupation: "Athlete - Sports/Recreation",
         },
         {
           firstName: "Sarah",
@@ -84,6 +86,7 @@ export const test = base.extend<{ testData: TestData }>({
           dLState: "TX",
           yearsLicensed: "More than 3 years",
           education: "Bachelor's Degree",
+          occupation: "Athlete - Sports/Recreation",
         },
       ],
       vehicles: [
@@ -115,7 +118,7 @@ export const test = base.extend<{ testData: TestData }>({
         },
       ],
       paymentDetails: {
-        cardHolderName: "Richard King",
+        cardHolderName: "Richie Test",
         cardNumber: "4111111111111111", // Example Visa test card number
         expirationDate: "03/30",
         cvv: "737",

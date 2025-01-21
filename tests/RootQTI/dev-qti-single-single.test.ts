@@ -1,5 +1,5 @@
-import { test, expect } from "./fixtures/pocQTIRootTestData";
-import { SFLoginPage } from "../../pages/SFLoginPage";
+import { test, expect } from "./Fixtures/pocQTIRootTestData";
+import { SFLoginPage } from "../shared/Pages/SFLoginPage";
 import {
   AviatorAddressPage,
   AviatorClientInfoPage,
@@ -7,15 +7,17 @@ import {
   AviatorVehiclesPage,
   AviatorPriorPolicyPage,
   AviatorResponsePage,
-} from "../../pages/Aviator";
-import { RootBasicInformationPage } from "../../pages/Root/RootBasicInformationPage";
-import { RootDriversPage } from "../../pages/Root/RootDriversPage";
-import { RootVehiclesPage } from "../../pages/Root/RootVehiclesPage";
-import { RootCoveragesPage } from "../../pages/Root/RootCoveragesPage";
-import { RootPolicySummaryPage } from "../../pages/Root/RootPolicySummaryPage";
-import { RootRunReportsModal } from "../../pages/Root/RootRunReportsModal";
-import { RootCheckoutPage } from "../../pages/Root/RootCheckoutPage";
-import { RootSuccessPage } from "../../pages/Root/RootSuccessPage";
+} from "../Aviator/Pages";
+import {
+  RootBasicInformationPage,
+  RootDriversPage,
+  RootVehiclesPage,
+  RootCoveragesPage,
+  RootPolicySummaryPage,
+  RootRunReportsModal,
+  RootCheckoutPage,
+  RootSuccessPage,
+} from "../RootQTI/Pages";
 
 test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   test.setTimeout(600000);
@@ -53,7 +55,6 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   await aviatorClientInfoPage.selectMaritalStatus(
     testData.drivers[0].maritalStatus
   );
-  await aviatorClientInfoPage.fillPhoneNumber(testData.drivers[0].phone);
 
   // Sending next expected page so it will wait for it to load prior to running next step
   await aviatorClientInfoPage.clickContinue(() =>

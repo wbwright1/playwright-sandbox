@@ -1,5 +1,4 @@
 import { Page, Locator } from "@playwright/test";
-import { retry } from "../../tests/utils/retryUtils";
 
 export class RootBasicInformationPage {
   private heading: Locator;
@@ -34,7 +33,7 @@ export class RootBasicInformationPage {
 
   async fillClientInfo(email: string, phoneNumber: string) {
     await this.emailField.fill(email);
-    await this.phoneNumberField.fill(phoneNumber);
+    await this.phoneNumberField.type(phoneNumber);
   }
 
   async clickContinue(nextPageCheck: () => Promise<void>) {

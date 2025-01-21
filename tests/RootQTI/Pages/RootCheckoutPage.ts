@@ -1,5 +1,4 @@
 import { Page, Locator, FrameLocator } from "@playwright/test";
-import { retry } from "../../tests/utils/retryUtils";
 
 export class RootCheckoutPage {
   private heading: Locator;

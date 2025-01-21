@@ -1,5 +1,3 @@
-// pages/Aviator/index.ts
-
 export { AviatorAddressPage } from "./AviatorAddressPage";
 export { AviatorClientInfoPage } from "./AviatorClientInfoPage";
 export { AviatorDriversPage } from "./AviatorDriversPage";

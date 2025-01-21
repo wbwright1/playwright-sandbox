@@ -1,5 +1,5 @@
 import { Page, Locator } from "@playwright/test";
-import { retry } from "../tests/utils/retryUtils";
+import { retry } from "../utils/retryUtils";
 
 export class SFLoginPage {
   private loginButton: Locator;
@@ -26,7 +26,9 @@ export class SFLoginPage {
   }
 
   async navigateToPreprodLogin() {
-    await this.page.goto("https://preprod.agent-quotes.goosehead.com/agent/Auto/Responses");
+    await this.page.goto(
+      "https://preprod.agent-quotes.goosehead.com/agent/Auto/Responses"
+    );
   }
 
   async login(username: string, password: string) {

@@ -1,5 +1,5 @@
 import { test as base } from "@playwright/test";
-import { generateRandomString } from "../../utils/randomStringUtils";
+import { generateRandomString } from "../../shared/utils/randomStringUtils";
 
 type TestData = {
   address: string;

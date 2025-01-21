@@ -1,6 +1,5 @@
 import { Page, Locator } from "@playwright/test";
-import { DriverInfo } from "../../tests/utils/driverInfoUtils";
-import { retry } from "../../tests/utils/retryUtils";
+import { DriverInfo } from "../../shared/utils/driverInfoUtils";
 
 export class AviatorDriversPage {
   private heading: Locator;

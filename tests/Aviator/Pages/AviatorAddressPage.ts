@@ -1,5 +1,5 @@
 import { Page, Locator } from "@playwright/test";
-import { retry } from "../../tests/utils/retryUtils";
+import { retry } from "../../shared/utils/retryUtils";
 
 export class AviatorAddressPage {
   private addressField: Locator;

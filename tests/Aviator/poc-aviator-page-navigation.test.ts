@@ -1,5 +1,5 @@
-import { test, expect } from "./fixtures/pocTestDataFixture";
-import { SFLoginPage } from "../../pages/SFLoginPage";
+import { test, expect } from "./Fixtures/pocTestDataFixture";
+import { SFLoginPage } from "../shared/Pages/SFLoginPage";
 import {
   AviatorAddressPage,
   AviatorClientInfoPage,
@@ -7,7 +7,7 @@ import {
   AviatorVehiclesPage,
   AviatorPriorPolicyPage,
   AviatorResponsePage,
-} from "../../pages/Aviator";
+} from "../Aviator/Pages";
 
 test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   test.setTimeout(60000);

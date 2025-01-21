@@ -26,13 +26,13 @@ export class AviatorClientInfoPage {
     lastName: string,
     dob: string,
     email: string,
-    phone: string,
+    phone: string
   ) {
     await this.firstNameField.fill(firstName);
     await this.lastNameField.fill(lastName);
     await this.dobField.type(dob);
-    await this.emailField.fill(email);
-    await this.phoneField.fill(phone);
+    await this.emailField.type(email);
+    await this.phoneField.type(phone);
   }
 
   async selectGender(gender: string) {
