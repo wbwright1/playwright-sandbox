@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import dotenv from "dotenv";
 import path from "path";
-import { SFLoginPage } from "../shared/Pages/SFLoginPage";
+import { SFLoginPage } from "../../shared/Pages/SFLoginPage";
 
 //dotenv.config({ path: path.resolve(__dirname, '../.env') });
 

@@ -1,5 +1,5 @@
-import { test, expect } from "./Fixtures/pocQTIRootTestData";
-import { SFLoginPage } from "../shared/Pages/SFLoginPage";
+import { test, expect } from "../Fixtures/pocQTIRootTestData";
+import { SFLoginPage } from "../../shared/Pages/SFLoginPage";
 import {
   AviatorAddressPage,
   AviatorClientInfoPage,
@@ -7,7 +7,7 @@ import {
   AviatorVehiclesPage,
   AviatorPriorPolicyPage,
   AviatorResponsePage,
-} from "../Aviator/Pages";
+} from "../../Aviator/Pages";
 import {
   RootBasicInformationPage,
   RootDriversPage,
@@ -17,9 +17,9 @@ import {
   RootRunReportsModal,
   RootCheckoutPage,
   RootSuccessPage,
-} from "../RootQTI/Pages";
+} from "../Pages";
 
-test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
+test("Aviator - Multi Driver / Multi Vehicle", async ({ page, testData }) => {
   test.setTimeout(600000);
 
   const sfLoginPage = new SFLoginPage(page);
@@ -39,7 +39,7 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   let rootCheckoutPage: RootCheckoutPage;
   let rootSuccessPage: RootSuccessPage;
 
-  await sfLoginPage.navigateToUATLogin();
+  await sfLoginPage.navigateToDevLogin();
   await sfLoginPage.login("automation.testing@goosehead.com.uat", "GHnov2022$");
 
   await aviatorAddressPage.fillAddressPageWithRetry(testData.address, 2);
@@ -108,14 +108,14 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   );
 
   await rootDriversPage.setDriverExclusionValues("Unknown to Applicant");
+  await rootDriversPage.addDrivers(testData.drivers);
   await rootDriversPage.clickContinue(() => rootVehiclesPage.checkHeading());
 
   // Example: Set all fields to "default-value", except the 3rd one to "custom-value"
   await rootVehiclesPage.setVehicleExclusionValues("Unknown to Applicant");
-  await rootVehiclesPage.fillVehicleInfo(testData.vehicles[0]);
+  await rootVehiclesPage.addVehicles(testData.vehicles);
 
   await rootVehiclesPage.clickContinue(() => rootCoveragesPage.checkHeading());
-  // await page6.getByLabel('Chase Home Finance, LLC').click();
 
   await rootCoveragesPage.setRideshare(testData.rideshare);
   // await rootCoveragesPage.setBodilyInjury("$50,000 / $100,000");
