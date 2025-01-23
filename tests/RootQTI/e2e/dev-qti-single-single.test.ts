@@ -1,4 +1,4 @@
-import { test, expect } from "../Fixtures/pocQTIRootTestData";
+import { test } from "../Fixtures/pocQTIRootTestData";
 import { SFLoginPage } from "../../shared/Pages/SFLoginPage";
 import {
   AviatorAddressPage,
@@ -19,7 +19,7 @@ import {
   RootSuccessPage,
 } from "../Pages";
 
-test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
+test("Root QTI - Single Driver / Single Vehicle", async ({ page, testData }) => {
   test.setTimeout(600000);
 
   const sfLoginPage = new SFLoginPage(page);

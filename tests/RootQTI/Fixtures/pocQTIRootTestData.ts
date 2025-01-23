@@ -66,7 +66,7 @@ export const test = base.extend<{ testData: TestData }>({
           dob: "07/07/1977",
           gender: "Male",
           maritalStatus: "Single",
-          phone: "4945436738",
+          phone: "44945436738",
           email: `${generateRandomString(10)}@test.com`,
           driverLicense: "12345678",
           dLState: "TX",

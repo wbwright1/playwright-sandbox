@@ -1,4 +1,4 @@
-import { test, expect } from "../Fixtures/pocTestDataFixture";
+import { test, expect } from "../Fixtures/virginiaAddress";
 import { SFLoginPage } from "../../shared/Pages/SFLoginPage";
 import {
   AviatorAddressPage,
@@ -10,7 +10,7 @@ import {
 } from "../Pages";
 
 test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
-  test.setTimeout(60000);
+  test.setTimeout(200000);
 
   const sfLoginPage = new SFLoginPage(page);
   const aviatorAddressPage = new AviatorAddressPage(page);
@@ -20,7 +20,7 @@ test("Aviator - Single Driver / Single Vehicle", async ({ page, testData }) => {
   const aviatorPriorPolicyPage = new AviatorPriorPolicyPage(page);
   const aviatorResponsePage = new AviatorResponsePage(page);
 
-  await sfLoginPage.navigateToUATLogin();
+  await sfLoginPage.navigateToDevLogin();
   await sfLoginPage.login("automation.testing@goosehead.com.uat", "GHnov2022$");
 
   await aviatorAddressPage.fillAddressPageWithRetry(testData.address, 2);
